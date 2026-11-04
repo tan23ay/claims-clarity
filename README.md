@@ -2,6 +2,8 @@
 
 A working synthetic healthcare claims demo with a Node.js HTTP API, SQLite database, the interactive frontend, an optional TypeSafe/JEV shadow adapter, Docker persistence, automated tests, and GitHub CI. The existing 50 synthetic claim records are preserved. The original product brief is a reference; the repository implements the demo scope documented below.
 
+**Live site:** [Claims Clarity prototype](https://beamish-quokka-0d8554.netlify.app/)
+
 ## Run it
 
 Requirements: Node.js 24.15+ (24.x). There are no external npm dependencies. SQLite uses Node's built-in `node:sqlite` module.
