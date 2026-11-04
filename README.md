@@ -15,7 +15,7 @@ node server.mjs
 
 If npm is available, use `npm start`. Optional local settings are loaded from `.env`; copy `.env.example` to `.env` first if you want to configure an admin account or JEV.
 
-Open [http://127.0.0.1:4173](http://127.0.0.1:4173). The server also accepts `PORT` and `HOST` environment variables when another local endpoint is needed.
+For the hosted frontend, open the [Claims Clarity prototype](https://beamish-quokka-0d8554.netlify.app/). To use the full frontend and backend locally, keep `node server.mjs` running and then enter `http://127.0.0.1:4173` in a browser on the same computer. This localhost address is not a public website and will not work when the server is stopped. The server also accepts `PORT` and `HOST` environment variables when another local endpoint is needed.
 
 On first start, SQL migrations create `storage/claims.sqlite` and import the 50 records. Later starts retain sessions, calls, explanations, handoffs, and audit records. The browser establishes an isolated demo operator session and uses the same-origin API. Calls can resume after a page refresh. `npm run seed` regenerates the source fixtures; it never overwrites an existing database.
 
@@ -29,7 +29,7 @@ The Docker image contains the backend, frontend, migrations, and 50-record datas
 docker compose up --build
 ```
 
-Then open [http://127.0.0.1:4173](http://127.0.0.1:4173). Useful commands:
+Keep the container running, then enter `http://127.0.0.1:4173` in a browser on the same computer. Useful commands:
 
 ```bash
 docker compose logs -f
