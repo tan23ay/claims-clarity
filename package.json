@@ -1,0 +1,20 @@
+{
+  "name": "claims-clarity-prototype",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Healthcare claims demo with persistent backend, synthetic data, and optional JEV shadow integration",
+  "type": "module",
+  "engines": { "node": ">=24.15.0 <25" },
+  "scripts": {
+    "seed": "node scripts/generate-data.mjs",
+    "verify:data": "node scripts/verify-data.mjs",
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs",
+    "db:migrate": "node scripts/database.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "docs:api": "node scripts/generate-openapi.mjs",
+    "docker:build": "docker build -t claims-clarity-prototype:latest .",
+    "docker:run": "docker run --rm -p 4173:4173 claims-clarity-prototype:latest"
+  }
+}

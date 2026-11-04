@@ -1,0 +1,1672 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Claims Clarity Backend",
+    "version": "0.2.0",
+    "description": "Synthetic demo API. Cookie sessions require X-CSRF-Token on POST requests; bearer sessions do not. All claims are synthetic. Caller verification is a simulated checkbox."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4173",
+      "description": "Local frontend + backend"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    },
+    {
+      "cookieAuth": []
+    }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Read health and database readiness",
+        "operationId": "get__api_health",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/meta": {
+      "get": {
+        "summary": "Read demo and integration capabilities",
+        "operationId": "get__api_meta",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/openapi.json": {
+      "get": {
+        "summary": "Read this API specification",
+        "operationId": "get__api_openapi_json",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/demo": {
+      "post": {
+        "summary": "Create an isolated synthetic demo operator session",
+        "operationId": "post__api_auth_demo",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Sign in as the configured demo administrator",
+        "operationId": "post__api_auth_login",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "maxLength": 256
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "summary": "Read the current user and CSRF token",
+        "operationId": "get__api_auth_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "Revoke the current session",
+        "operationId": "post__api_auth_logout",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/claims": {
+      "get": {
+        "summary": "Search and paginate synthetic claims",
+        "operationId": "get__api_claims",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "outcome",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "risk",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "escalation",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Claim"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "provenance": {
+                      "const": "SYNTHETIC"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/claims/{id}": {
+      "get": {
+        "summary": "Read an exact synthetic claim",
+        "operationId": "get__api_claims_id_",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Claim"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/claims/{id}/evidence": {
+      "get": {
+        "summary": "Inspect deterministic evidence and citation checks",
+        "operationId": "get__api_claims_id_evidence",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Evidence"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policies": {
+      "get": {
+        "summary": "List versioned synthetic policy passages",
+        "operationId": "get__api_policies",
+        "parameters": [
+          {
+            "name": "plan",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Policy"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "provenance": {
+                      "const": "SYNTHETIC"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/policies/{id}": {
+      "get": {
+        "summary": "Read a synthetic policy passage",
+        "operationId": "get__api_policies_id_",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Policy"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stats": {
+      "get": {
+        "summary": "Read counts derived from database records",
+        "operationId": "get__api_stats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calls": {
+      "get": {
+        "summary": "List calls owned by the current user",
+        "operationId": "get__api_calls",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Call"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "provenance": {
+                      "const": "SYNTHETIC"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a caller workflow",
+        "operationId": "post__api_calls",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Call"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calls/{id}": {
+      "get": {
+        "summary": "Read an owned caller workflow",
+        "operationId": "get__api_calls_id_",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Call"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calls/{id}/verify": {
+      "post": {
+        "summary": "Confirm synthetic caller verification",
+        "operationId": "post__api_calls_id_verify",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "confirmed": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "confirmed"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Call"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calls/{id}/claim": {
+      "post": {
+        "summary": "Match a verified caller to an exact claim",
+        "operationId": "post__api_calls_id_claim",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "claimId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "claimId"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "call": {
+                      "$ref": "#/components/schemas/Call"
+                    },
+                    "claim": {
+                      "$ref": "#/components/schemas/Claim"
+                    }
+                  },
+                  "required": []
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calls/{id}/explanation": {
+      "post": {
+        "summary": "Build and persist an evidence-grounded explanation",
+        "operationId": "post__api_calls_id_explanation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Explanation"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calls/{id}/handoff": {
+      "post": {
+        "summary": "Prepare an idempotent human handoff",
+        "operationId": "post__api_calls_id_handoff",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Handoff"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calls/{id}/complete": {
+      "post": {
+        "summary": "Complete an explained or escalated call",
+        "operationId": "post__api_calls_id_complete",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Call"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calls/{id}/cancel": {
+      "post": {
+        "summary": "Cancel an active demo workflow",
+        "operationId": "post__api_calls_id_cancel",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Call"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/jev/shadow": {
+      "post": {
+        "summary": "Evaluate an existing synthetic claim in JEV shadow mode",
+        "operationId": "post__api_jev_shadow",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "claimId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "claimId"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JevResult"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/handoffs": {
+      "get": {
+        "summary": "List prepared handoffs owned by the current user",
+        "operationId": "get__api_handoffs",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Handoff"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "provenance": {
+                      "const": "SYNTHETIC"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/audit": {
+      "get": {
+        "summary": "Read the append-only audit trail in user scope",
+        "operationId": "get__api_audit",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Audit"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "provenance": {
+                      "const": "SYNTHETIC"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/audit/integrity": {
+      "get": {
+        "summary": "Administrator: verify the entire audit hash chain",
+        "operationId": "get__api_admin_audit_integrity",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/dataset": {
+      "get": {
+        "summary": "Administrator: export all 50 synthetic records",
+        "operationId": "get__api_admin_dataset",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Claim"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "provenance": {
+                      "const": "SYNTHETIC"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Structured API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "cc_session"
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "requestId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "Health": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "const": "ok"
+          },
+          "database": {
+            "const": "ok"
+          },
+          "appEnv": {
+            "type": "string"
+          },
+          "provenance": {
+            "const": "SYNTHETIC"
+          }
+        },
+        "required": [
+          "status",
+          "database"
+        ]
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "role": {
+                "enum": [
+                  "demo",
+                  "admin"
+                ]
+              }
+            },
+            "required": []
+          },
+          "token": {
+            "type": "string"
+          },
+          "csrfToken": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "user",
+          "csrfToken",
+          "expiresAt"
+        ]
+      },
+      "Claim": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "memberName": {
+            "type": "string"
+          },
+          "memberId": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "string"
+          },
+          "planVersion": {
+            "type": "string"
+          },
+          "serviceDate": {
+            "type": "string"
+          },
+          "outcome": {
+            "enum": [
+              "Denied",
+              "Partially paid",
+              "Pending"
+            ]
+          },
+          "risk": {
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ]
+          },
+          "reasonStatus": {
+            "type": "string"
+          },
+          "policySupport": {
+            "type": "string"
+          },
+          "escalationRequired": {
+            "type": "boolean"
+          },
+          "billed": {
+            "type": "number"
+          },
+          "paid": {
+            "type": "number"
+          },
+          "adjusted": {
+            "type": "number"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/Policy"
+          },
+          "provenance": {
+            "const": "SYNTHETIC"
+          }
+        },
+        "required": [
+          "id",
+          "provenance"
+        ]
+      },
+      "Policy": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "document": {
+            "type": "string"
+          },
+          "section": {
+            "type": "string"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "effectiveDate": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "string"
+          },
+          "planVersion": {
+            "type": "string"
+          },
+          "provenance": {
+            "const": "SYNTHETIC"
+          }
+        },
+        "required": []
+      },
+      "Evidence": {
+        "type": "object",
+        "properties": {
+          "claimId": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "asOf": {
+            "type": "string"
+          },
+          "reasonStatus": {
+            "type": "string"
+          },
+          "policySupport": {
+            "type": "string"
+          },
+          "citations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Policy"
+            }
+          },
+          "missingInformation": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "payment": {
+            "type": "object"
+          },
+          "provenance": {
+            "const": "SYNTHETIC"
+          }
+        },
+        "required": []
+      },
+      "Call": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "CREATED",
+              "VERIFIED",
+              "MATCHED",
+              "INVESTIGATING",
+              "EXPLAINED",
+              "ESCALATED",
+              "COMPLETED",
+              "CANCELLED"
+            ]
+          },
+          "claimId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": "integer"
+          },
+          "explanation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Explanation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "provenance": {
+            "const": "SYNTHETIC"
+          }
+        },
+        "required": [
+          "id",
+          "state"
+        ]
+      },
+      "Explanation": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "verified": {
+            "const": true
+          },
+          "verificationMode": {
+            "type": "string"
+          },
+          "packet": {
+            "$ref": "#/components/schemas/Evidence"
+          },
+          "routing": {
+            "type": "object"
+          },
+          "jev": {
+            "$ref": "#/components/schemas/JevResult"
+          },
+          "provenance": {
+            "const": "SYNTHETIC"
+          }
+        },
+        "required": [
+          "text",
+          "packet",
+          "routing",
+          "jev"
+        ]
+      },
+      "Handoff": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "callId": {
+            "type": "string"
+          },
+          "claimId": {
+            "type": "string"
+          },
+          "status": {
+            "const": "PREPARED"
+          },
+          "externalActionSent": {
+            "const": false
+          },
+          "provenance": {
+            "const": "SYNTHETIC"
+          }
+        },
+        "required": [
+          "id",
+          "status"
+        ]
+      },
+      "JevResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "enum": [
+              "shadow",
+              "unavailable"
+            ]
+          },
+          "mode": {
+            "const": "shadow"
+          },
+          "advisoryOnly": {
+            "const": true
+          },
+          "reason": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "answers": {
+            "type": "object"
+          },
+          "assessment": {
+            "type": "object"
+          },
+          "finalRouting": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "status",
+          "mode",
+          "advisoryOnly"
+        ]
+      },
+      "Audit": {
+        "type": "object",
+        "properties": {
+          "sequence": {
+            "type": "integer"
+          },
+          "id": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "record": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "previousHash": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          }
+        },
+        "required": []
+      }
+    }
+  }
+}

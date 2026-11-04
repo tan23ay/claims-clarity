@@ -1,0 +1,35 @@
+services:
+  claims-clarity:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: claims-clarity-prototype:latest
+    ports:
+      - "127.0.0.1:${PORT:-4173}:4173"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 4173
+      APP_ENV: demo
+      DEMO_MODE: ${DEMO_MODE:-true}
+      DATABASE_PATH: /app/storage/claims.sqlite
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      DEMO_ADMIN_USERNAME: ${DEMO_ADMIN_USERNAME:-admin}
+      DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD:-}
+      JEV_ENABLED: ${JEV_ENABLED:-false}
+      JEV_API_KEY: ${JEV_API_KEY:-}
+      JEV_MODEL: ${JEV_MODEL:-jev-1.13.0}
+      JEV_TIMEOUT_MS: ${JEV_TIMEOUT_MS:-2500}
+    volumes:
+      - claims-data:/app/storage
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    init: true
+volumes:
+  claims-data:

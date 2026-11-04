@@ -1,0 +1,33 @@
+name: Backend CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Validate dataset and test API
+        run: |
+          node scripts/verify-data.mjs
+          node --test tests/*.test.mjs
+          node scripts/generate-openapi.mjs
+          git diff --exit-code docs/openapi.json
+      - name: Build Docker image
+        run: docker build -t claims-clarity:ci .
+      - name: Exercise container workflow
+        run: |
+          docker run -d --name claims-ci -p 127.0.0.1:4173:4173 claims-clarity:ci
+          for i in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/api/health; then break; fi
+            sleep 1
+          done
+          node scripts/smoke.mjs
+      - name: Container diagnostics
+        if: always()
+        run: docker logs claims-ci || true

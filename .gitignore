@@ -1,0 +1,22 @@
+node_modules/
+.npm/
+.env
+.env.*
+!.env.example
+
+# Generated build and deployment artifacts
+dist/
+outputs/
+work/
+
+# Local tooling and editor files
+.openai/
+.codex/
+.DS_Store
+Thumbs.db
+*.log
+storage/
+coverage/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
